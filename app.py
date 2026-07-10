@@ -45,6 +45,19 @@ MESSAGE_TEMPLATES = {
 }
 
 
+def apply_message_template():
+    """テンプレート変更時に連絡内容へ反映する。"""
+    template_name = st.session_state.get("send_template", "自由入力")
+    st.session_state["send_message"] = MESSAGE_TEMPLATES.get(template_name, "")
+
+
+def reset_send_form():
+    """送信完了後に入力内容を初期化する。"""
+    st.session_state["send_targets"] = []
+    st.session_state["send_template"] = "自由入力"
+    st.session_state["send_message"] = ""
+
+
 def get_conn():
     return sqlite3.connect(DB_PATH, check_same_thread=False)
 
@@ -500,16 +513,56 @@ if mode == "連絡作成":
     st.header("連絡作成")
     show_guide("<b>概要：</b>対象船を選択し、連絡内容を登録します。登録した連絡は船側画面に反映されます。")
 
-    input_type = st.radio("入力方法", ["手入力", "マイク認識"], horizontal=True)
+    # 送信後の通知は再読み込み後も1回だけ表示する
+    send_notice = st.session_state.pop("send_notice", None)
+    if send_notice:
+        st.success(
+            f"連絡を送信しました。連絡ID：{send_notice['log_id']}　"
+            f"送信先：{'、'.join(send_notice['targets'])}"
+        )
+        st.caption("入力欄を初期化しました。続けて新しい連絡を作成できます。")
 
-    sender = st.selectbox("送信元", ["漁協", "船A", "船B", "船C", "その他"])
-    target_ships = st.multiselect("対象船", ships, default=ships)
+    # 初期値
+    if "send_input_type" not in st.session_state:
+        st.session_state["send_input_type"] = "手入力"
+    if "send_sender" not in st.session_state:
+        st.session_state["send_sender"] = "漁協"
+    if "send_targets" not in st.session_state:
+        st.session_state["send_targets"] = ships.copy()
+    if "send_template" not in st.session_state:
+        st.session_state["send_template"] = "帰港連絡"
+    if "send_message" not in st.session_state:
+        st.session_state["send_message"] = MESSAGE_TEMPLATES["帰港連絡"]
+
+    input_type = st.radio(
+        "入力方法",
+        ["手入力", "マイク認識"],
+        horizontal=True,
+        key="send_input_type",
+    )
+
+    sender = st.selectbox(
+        "送信元",
+        ["漁協", "船A", "船B", "船C", "その他"],
+        key="send_sender",
+    )
+    target_ships = st.multiselect(
+        "対象船",
+        ships,
+        key="send_targets",
+        placeholder="送信する船を選択してください",
+    )
 
     if input_type == "手入力":
-        template_name = st.selectbox("テンプレート", list(MESSAGE_TEMPLATES.keys()))
+        st.selectbox(
+            "テンプレート",
+            list(MESSAGE_TEMPLATES.keys()),
+            key="send_template",
+            on_change=apply_message_template,
+        )
         message = st.text_area(
             "連絡内容",
-            value=MESSAGE_TEMPLATES[template_name],
+            key="send_message",
             placeholder="例：重要、波が高くなる予報のため早めに帰港してください。",
             height=130,
         )
@@ -517,14 +570,19 @@ if mode == "連絡作成":
         tags = detect_tags(message)
         st.info(f"自動タグ：{', '.join(tags) if tags else '通常'}")
 
-        if st.button("連絡を送信・記録する"):
+        if st.button("連絡を送信・記録する", type="primary"):
             if not message.strip():
                 st.warning("連絡内容を入力してください。")
             elif len(target_ships) == 0:
                 st.warning("対象船を選んでください。")
             else:
-                log_id = add_log(sender, message.strip(), target_ships)
-                st.success(f"連絡を記録しました。次は船側で確認できます。連絡ID：{log_id}")
+                sent_targets = target_ships.copy()
+                log_id = add_log(sender, message.strip(), sent_targets)
+                st.session_state["send_notice"] = {
+                    "log_id": log_id,
+                    "targets": sent_targets,
+                }
+                reset_send_form()
                 st.rerun()
 
     else:
@@ -533,15 +591,22 @@ if mode == "連絡作成":
 
         seconds = st.slider("聞き取る秒数", 3, 15, 5)
 
-        if st.button("マイクで聞き取って送信"):
-            text = recognize_from_microphone(seconds)
-            if text:
-                st.success("音声を認識しました。")
-                st.write(f"認識結果：{text}")
-                log_id = add_log(sender, text, target_ships)
-                st.success(f"連絡を記録しました。連絡ID：{log_id}")
+        if st.button("マイクで聞き取って送信", type="primary"):
+            if len(target_ships) == 0:
+                st.warning("対象船を選んでください。")
             else:
-                st.warning("音声を認識できませんでした。")
+                text = recognize_from_microphone(seconds)
+                if text:
+                    sent_targets = target_ships.copy()
+                    log_id = add_log(sender, text, sent_targets)
+                    st.session_state["send_notice"] = {
+                        "log_id": log_id,
+                        "targets": sent_targets,
+                    }
+                    reset_send_form()
+                    st.rerun()
+                else:
+                    st.warning("音声を認識できませんでした。")
 
 
 elif mode == "船側確認":
