@@ -280,35 +280,34 @@ def seed_sample_if_empty():
         mark_read(sample2, "船A")
 
 
-def inject_css():
-    """style.cssを読み込む。なければ最低限のCSSだけ適用する。"""
-    css_path = Path("style.css")
+def inject_css(theme):
+    """選択された表示テーマのCSSを読み込む。"""
+    css_name = "style_dark.css" if theme == "ダーク" else "style_light.css"
+    css_path = Path(css_name)
+
+    if not css_path.exists():
+        css_path = Path("style.css")
+
     if css_path.exists():
         css = css_path.read_text(encoding="utf-8")
     else:
         css = """
-        .stApp { background: #f3f8fa; }
-        .hero { background: #0f4c5c; color: white; padding: 18px; border-radius: 18px; }
-        .message-card { background: white; border-left: 8px solid #0f4c5c; padding: 15px; border-radius: 16px; margin: 12px 0; }
-        .message-important { border-left-color: #d32f2f; background: #fff8f8; }
-        .keyword { font-weight: 900; background: linear-gradient(transparent 55%, #ffe08a 55%); }
+        .stApp { background: #f6f8fb; color: #1f2937; }
+        .hero { background: #ffffff; padding: 24px; border: 1px solid #e5e7eb; }
         """
+
     st.markdown(f"<style>{css}</style>", unsafe_allow_html=True)
-
-
-
 
 def show_header():
     st.markdown("""
     <div class="hero">
-      <h1>📢 漁業連絡確認システム</h1>
-      <p>漁協が送った連絡を、船が確認したか分かるアプリ</p>
+      <h1>漁業連絡管理システム</h1>
+      <p>漁協と船舶の連絡、および確認状況を一元管理します。</p>
     </div>
     <div class="flow">
-      ① 漁協が送る　→　② 船が確認する　→　③ 漁協が確認状況を見る
+      連絡作成　／　船側確認　／　確認状況
     </div>
     """, unsafe_allow_html=True)
-
 
 def show_guide(text):
     st.markdown(f'<div class="guide">{text}</div>', unsafe_allow_html=True)
@@ -376,7 +375,7 @@ def show_ship_messages(ship_name):
         return
 
     for _, row in ship_logs.iterrows():
-        status = "✅ 確認済み" if row["is_read"] else "❌ 未確認"
+        status = "確認済み" if row["is_read"] else "未確認"
         render_log_card(row, status)
 
         if row["is_read"]:
@@ -460,37 +459,46 @@ def show_admin_status(selected_id):
         st.success("全ての船が確認済みです。")
 
 
-st.set_page_config(page_title="漁業連絡確認システム", page_icon="📢", layout="wide")
-inject_css()
+st.set_page_config(page_title="漁業連絡管理システム", layout="wide")
+
 init_db()
 seed_sample_if_empty()
 
+st.sidebar.markdown("### 表示設定")
+theme = st.sidebar.radio(
+    "テーマ",
+    ["ライト", "ダーク"],
+    horizontal=True,
+    key="display_theme",
+)
+inject_css(theme)
+
 show_header()
 
-with st.expander("使い方を確認する"):
+with st.expander("操作方法"):
     st.write("""
-    1. **漁協側：連絡を送る** で連絡を送信する  
-    2. **船側：連絡を確認する** で船を選び、「確認しました」を押す  
-    3. **漁協側：確認状況を見る** で確認済み・未確認を確認する  
+    - **連絡作成**で船舶への連絡を登録します。  
+    - **船側確認**で対象船を選び、確認済みにします。  
+    - **確認状況**で船ごとの確認状況を確認します。  
     """)
 
 mode = st.sidebar.radio(
     "画面を選択",
     [
-        "漁協側：連絡を送る",
-        "船側：連絡を確認する",
-        "漁協側：確認状況を見る",
-        "設定",
-        "発表用まとめ",
+        "連絡作成",
+        "船側確認",
+        "確認状況",
+        "システム設定",
+        "システム概要",
     ]
 )
 
 ships = list_ships()
 
 
-if mode == "漁協側：連絡を送る":
-    st.header("① 漁協側：連絡を送る")
-    show_guide("<b>ここでやること：</b>漁協側が船に向けて連絡を送ります。送った連絡は船側画面に表示されます。")
+if mode == "連絡作成":
+    st.header("連絡作成")
+    show_guide("<b>概要：</b>対象船を選択し、連絡内容を登録します。登録した連絡は船側画面に反映されます。")
 
     input_type = st.radio("入力方法", ["手入力", "マイク認識"], horizontal=True)
 
@@ -536,17 +544,17 @@ if mode == "漁協側：連絡を送る":
                 st.warning("音声を認識できませんでした。")
 
 
-elif mode == "船側：連絡を確認する":
-    st.header("② 船側：自分宛ての連絡を確認する")
-    show_guide("<b>ここでやること：</b>船側の人が連絡を見て、「確認しました」を押します。")
+elif mode == "船側確認":
+    st.header("船側確認")
+    show_guide("<b>概要：</b>自船宛ての連絡を確認し、確認状況を登録します。")
 
     ship_name = st.selectbox("自分の船を選択", ships)
     show_ship_messages(ship_name)
 
 
-elif mode == "漁協側：確認状況を見る":
-    st.header("③ 漁協側：船ごとの確認状況")
-    show_guide("<b>ここでやること：</b>漁協側が、どの船が確認済みでどの船が未確認なのかを確認します。")
+elif mode == "確認状況":
+    st.header("確認状況")
+    show_guide("<b>概要：</b>連絡ごとに、各船の確認済み・未確認状況を確認します。")
 
     logs_df = get_logs()
     if len(logs_df) == 0:
@@ -560,8 +568,8 @@ elif mode == "漁協側：確認状況を見る":
         show_admin_status(selected_id)
 
 
-elif mode == "設定":
-    st.header("設定")
+elif mode == "システム設定":
+    st.header("システム設定")
 
     st.subheader("船の追加")
     new_ship = st.text_input("追加する船名", placeholder="例：船F")
@@ -594,11 +602,11 @@ elif mode == "設定":
         )
 
 
-elif mode == "発表用まとめ":
-    st.header("発表用まとめ")
+elif mode == "システム概要":
+    st.header("システム概要")
     st.markdown("""
-### テーマ
-**漁業連絡確認システム**
+### システム名称
+**漁業連絡管理システム**
 
 ### 課題
 船上ではエンジン音、波、風、作業音などで、無線や口頭の連絡を聞き逃すことがあります。  
