@@ -340,6 +340,125 @@ def render_log_card(log, status_text=None):
 
     st.markdown(card_html, unsafe_allow_html=True)
 
+@st.fragment(run_every="3s")
+def show_ship_messages(ship_name):
+    """船側の連絡一覧を3秒ごとに自動更新する。"""
+    conn = get_conn()
+    ship_logs = pd.read_sql_query("""
+        SELECT logs.id, logs.created_at, logs.sender, logs.message, logs.tags,
+               reads.is_read, reads.read_at
+        FROM logs
+        JOIN reads ON logs.id = reads.log_id
+        WHERE reads.ship_name=?
+        ORDER BY logs.id DESC
+    """, conn, params=(ship_name,))
+    conn.close()
+
+    st.caption("新着連絡を3秒ごとに自動確認しています。")
+
+    if len(ship_logs) == 0:
+        st.warning("自分宛ての連絡はありません。")
+        return
+
+    unread_count = int((ship_logs["is_read"] == 0).sum())
+    st.metric("未確認の連絡", unread_count)
+
+    only_unread = st.checkbox(
+        "未確認だけ表示する",
+        value=True,
+        key=f"only_unread_{ship_name}"
+    )
+    if only_unread:
+        ship_logs = ship_logs[ship_logs["is_read"] == 0]
+
+    if len(ship_logs) == 0:
+        st.success("未確認の連絡はありません。")
+        return
+
+    for _, row in ship_logs.iterrows():
+        status = "✅ 確認済み" if row["is_read"] else "❌ 未確認"
+        render_log_card(row, status)
+
+        if row["is_read"]:
+            st.success(f"確認済み：{row['read_at']}")
+        else:
+            if st.button(
+                "確認しました",
+                key=f"ship_read_{ship_name}_{row['id']}"
+            ):
+                mark_read(int(row["id"]), ship_name)
+                st.success("確認済みにしました。漁協側にも反映されます。")
+                st.rerun()
+
+
+@st.fragment(run_every="3s")
+def show_admin_status(selected_id):
+    """漁協側の既読状況を3秒ごとに自動更新する。"""
+    log = get_log(selected_id)
+    if log is None:
+        st.warning("選択した連絡が見つかりません。")
+        return
+
+    status_df = get_read_status(selected_id)
+    st.caption("船の確認状況を3秒ごとに自動確認しています。")
+
+    render_log_card(log)
+
+    read_count = int(status_df["is_read"].sum()) if len(status_df) else 0
+    total = len(status_df)
+    unread_count = total - read_count
+
+    col1, col2, col3 = st.columns(3)
+    col1.metric("対象船", f"{total}")
+    col2.metric("確認済み", f"{read_count}")
+    col3.metric("未確認", f"{unread_count}")
+
+    st.progress(0 if total == 0 else read_count / total)
+    st.write("### 船別一覧")
+
+    for _, row in status_df.iterrows():
+        ship = row["ship_name"]
+        is_read = bool(row["is_read"])
+        read_at = row["read_at"]
+
+        col_a, col_b, col_c = st.columns([2, 3, 3])
+
+        with col_a:
+            st.write(f"**{ship}**")
+
+        with col_b:
+            if is_read:
+                st.success(f"確認済み：{read_at}")
+            else:
+                st.error("未確認")
+
+        with col_c:
+            if is_read:
+                if st.button(
+                    f"{ship}を未確認に戻す",
+                    key=f"unread_{selected_id}_{ship}"
+                ):
+                    mark_unread(selected_id, ship)
+                    st.rerun()
+            else:
+                if st.button(
+                    f"{ship}を確認済みにする",
+                    key=f"read_admin_{selected_id}_{ship}"
+                ):
+                    mark_read(selected_id, ship)
+                    st.rerun()
+
+    unread_ships = status_df[status_df["is_read"] == 0]["ship_name"].tolist()
+    if unread_ships:
+        st.warning("未確認：" + "、".join(unread_ships))
+        if st.button(
+            "未確認の船に再確認を促す",
+            key=f"remind_{selected_id}"
+        ):
+            st.success("未確認の船に再確認を促しました。（プロトタイプ表示）")
+    else:
+        st.success("全ての船が確認済みです。")
+
 
 st.set_page_config(page_title="漁業連絡確認システム", page_icon="📢", layout="wide")
 inject_css()
@@ -422,42 +541,7 @@ elif mode == "船側：連絡を確認する":
     show_guide("<b>ここでやること：</b>船側の人が連絡を見て、「確認しました」を押します。")
 
     ship_name = st.selectbox("自分の船を選択", ships)
-
-    conn = get_conn()
-    ship_logs = pd.read_sql_query("""
-        SELECT logs.id, logs.created_at, logs.sender, logs.message, logs.tags,
-               reads.is_read, reads.read_at
-        FROM logs
-        JOIN reads ON logs.id = reads.log_id
-        WHERE reads.ship_name=?
-        ORDER BY logs.id DESC
-    """, conn, params=(ship_name,))
-    conn.close()
-
-    if len(ship_logs) == 0:
-        st.warning("自分宛ての連絡はありません。")
-    else:
-        unread_count = int((ship_logs["is_read"] == 0).sum())
-        st.metric("未確認の連絡", unread_count)
-
-        only_unread = st.checkbox("未確認だけ表示する", value=True)
-        if only_unread:
-            ship_logs = ship_logs[ship_logs["is_read"] == 0]
-
-        if len(ship_logs) == 0:
-            st.success("未確認の連絡はありません。")
-        else:
-            for _, row in ship_logs.iterrows():
-                status = "✅ 確認済み" if row["is_read"] else "❌ 未確認"
-                render_log_card(row, status)
-
-                if row["is_read"]:
-                    st.success(f"確認済み：{row['read_at']}")
-                else:
-                    if st.button("確認しました", key=f"ship_read_{ship_name}_{row['id']}"):
-                        mark_read(int(row["id"]), ship_name)
-                        st.success("確認済みにしました。漁協側にも反映されます。")
-                        st.rerun()
+    show_ship_messages(ship_name)
 
 
 elif mode == "漁協側：確認状況を見る":
@@ -473,58 +557,7 @@ elif mode == "漁協側：確認状況を見る":
             logs_df["id"].tolist(),
             format_func=lambda x: f"ID:{x} " + logs_df[logs_df["id"] == x]["message"].iloc[0][:35]
         )
-
-        log = get_log(selected_id)
-        status_df = get_read_status(selected_id)
-
-        render_log_card(log)
-
-        read_count = int(status_df["is_read"].sum()) if len(status_df) else 0
-        total = len(status_df)
-        unread_count = total - read_count
-
-        col1, col2, col3 = st.columns(3)
-        col1.metric("対象船", f"{total}")
-        col2.metric("確認済み", f"{read_count}")
-        col3.metric("未確認", f"{unread_count}")
-
-        st.progress(0 if total == 0 else read_count / total)
-
-        st.write("### 船別一覧")
-
-        for _, row in status_df.iterrows():
-            ship = row["ship_name"]
-            is_read = bool(row["is_read"])
-            read_at = row["read_at"]
-
-            col_a, col_b, col_c = st.columns([2, 3, 3])
-
-            with col_a:
-                st.write(f"**{ship}**")
-
-            with col_b:
-                if is_read:
-                    st.success(f"確認済み：{read_at}")
-                else:
-                    st.error("未確認")
-
-            with col_c:
-                if is_read:
-                    if st.button(f"{ship}を未確認に戻す", key=f"unread_{selected_id}_{ship}"):
-                        mark_unread(selected_id, ship)
-                        st.rerun()
-                else:
-                    if st.button(f"{ship}を確認済みにする", key=f"read_admin_{selected_id}_{ship}"):
-                        mark_read(selected_id, ship)
-                        st.rerun()
-
-        unread_ships = status_df[status_df["is_read"] == 0]["ship_name"].tolist()
-        if unread_ships:
-            st.warning("未確認：" + "、".join(unread_ships))
-            if st.button("未確認の船に再確認を促す"):
-                st.success("未確認の船に再確認を促しました。（プロトタイプ表示）")
-        else:
-            st.success("全ての船が確認済みです。")
+        show_admin_status(selected_id)
 
 
 elif mode == "設定":
