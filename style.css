@@ -1,203 +1,301 @@
 /* =========================
-   漁業連絡確認システム CSS (屋外視認性重視：黒背景・白文字)
+   漁業連絡確認システム CSS
+   屋外向け・高コントラスト改善版
    ========================= */
 
-/* 全体背景 */
+/* ---------- 全体 ---------- */
+html,
+body,
+[data-testid="stAppViewContainer"],
 .stApp {
-    background: #000000 !important;
-    color: #ffffff !important;
+    background: #071015 !important;
+    color: #f7fbff !important;
 }
 
-/* コンテンツ幅 */
+[data-testid="stHeader"] {
+    background: rgba(7, 16, 21, 0.96) !important;
+}
+
 .block-container {
     max-width: 1050px;
     padding-top: 1rem;
     padding-bottom: 3rem;
 }
 
-/* 上部タイトル */
+/* 通常の文字 */
+.stApp p,
+.stApp label,
+.stApp li,
+.stApp h1,
+.stApp h2,
+.stApp h3,
+.stApp h4 {
+    color: #f7fbff;
+}
+
+/* ---------- 上部タイトル ---------- */
 .hero {
-    background: linear-gradient(135deg, #0a3642 0%, #125666 100%);
+    background: linear-gradient(135deg, #0d4250 0%, #176f82 100%);
     color: #ffffff !important;
     padding: 20px 22px;
     border-radius: 20px;
     margin-bottom: 14px;
-    border: 2px solid #ffffff;
+    border: 2px solid #8eeeff;
+    box-shadow: 0 8px 24px rgba(0, 180, 216, 0.18);
 }
 
 .hero h1 {
     margin: 0;
     font-size: 1.75rem;
     font-weight: 900;
+    color: #ffffff !important;
 }
 
 .hero p {
     margin: 8px 0 0 0;
+    color: #e8fbff !important;
     opacity: 1;
 }
 
-/* デモの流れ */
+/* ---------- 流れ ---------- */
 .flow {
-    background: #000000;
-    border: 2px solid #ffffff;
+    background: #101c22;
+    border: 2px solid #6fe9ff;
     border-radius: 16px;
     padding: 13px;
     margin-bottom: 16px;
     text-align: center;
     font-weight: 900;
-    color: #4df3ff;
+    color: #7ff3ff;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.28);
 }
 
-/* 説明ボックス */
+/* ---------- 説明ボックス ---------- */
 .guide {
-    background: #000000;
-    border: 2px solid #ffffff;
-    border-left: 8px solid #ffcc00;
+    background: #171a10;
+    border: 1px solid #ffe17a;
+    border-left: 8px solid #ffca28;
     padding: 13px 14px;
     border-radius: 14px;
     margin: 10px 0 16px 0;
     line-height: 1.7;
-    color: #ffffff !important;
+    color: #fffce8 !important;
 }
 
-/* 通常の連絡カード */
+/* ---------- 連絡カード ---------- */
 .message-card {
-    background: #000000;
-    border: 2px solid #ffffff;
-    border-left: 10px solid #00aaff;
-    padding: 16px;
+    background: #0d1820;
+    border: 1px solid #6c8795;
+    border-left: 10px solid #25bfff;
+    padding: 18px;
     border-radius: 18px;
     margin: 12px 0;
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.28);
 }
 
-/* 重要連絡カード */
 .message-important {
-    border: 2px solid #ff3333;
-    border-left: 10px solid #ff3333;
-    background: #000000;
+    background: #211012;
+    border: 2px solid #ff6b6b;
+    border-left: 10px solid #ff3b3b;
 }
 
-/* カード内タイトル */
 .message-title {
-    font-size: 1.2rem;
+    font-size: 1.22rem;
     font-weight: 900;
     color: #ffffff !important;
 }
 
-/* カード内本文 */
 .message-body {
     font-size: 1.08rem;
-    line-height: 1.8;
-    margin-top: 8px;
+    line-height: 1.85;
+    margin-top: 10px;
     color: #ffffff !important;
+    overflow-wrap: anywhere;
 }
 
-/* 補足文字（日時など） */
 .sub {
-    color: #dddddd !important;
-    font-size: 0.86rem;
-    font-weight: bold;
+    color: #c9d6dd !important;
+    font-size: 0.9rem;
+    font-weight: 700;
 }
 
-/* タグ */
+/* ---------- タグ ---------- */
 .tag {
     display: inline-block;
-    padding: 4px 10px;
+    padding: 5px 11px;
     border-radius: 999px;
-    background: #222222;
-    border: 1px solid #ffffff;
-    color: #4df3ff !important;
-    margin-right: 5px;
+    background: #12303b;
+    border: 1px solid #78e9ff;
+    color: #8bf4ff !important;
+    margin-right: 6px;
     margin-top: 8px;
-    font-size: 0.82rem;
-    font-weight: 800;
+    font-size: 0.84rem;
+    font-weight: 900;
 }
 
-/* 重要タグ */
 .important-tag {
-    background: #ff3333;
+    background: #c62828;
+    border-color: #ffb3b3;
     color: #ffffff !important;
-    border: 1px solid #ffffff;
 }
 
 /* 本文中の重要ワード */
 .keyword {
+    display: inline-block;
     font-weight: 900;
-    background: #ffcc00;
-    color: #000000 !important;
-    padding: 0 4px;
-    border-radius: 4px;
+    background: #ffd632;
+    color: #111111 !important;
+    padding: 1px 5px;
+    border-radius: 5px;
+    line-height: 1.35;
 }
 
-/* ボタン */
-div.stButton > button {
+/* ---------- ボタン ---------- */
+div.stButton > button,
+div[data-testid="stDownloadButton"] > button {
     width: 100%;
+    min-height: 3rem;
     border-radius: 13px;
-    height: 3em;
     font-weight: 900;
-    border: 2px solid #ffffff !important;
-    background-color: #111111 !important;
+    border: 2px solid #7beaff !important;
+    background: #10313d !important;
     color: #ffffff !important;
 }
 
 div.stButton > button:hover,
-div.stButton > button:active {
-    background-color: #ffffff !important;
-    color: #000000 !important;
+div.stButton > button:focus,
+div[data-testid="stDownloadButton"] > button:hover {
+    background: #1b596b !important;
+    border-color: #ffffff !important;
+    color: #ffffff !important;
 }
 
-/* メトリック（件数表示など） */
+/* ---------- メトリック ---------- */
 div[data-testid="stMetric"] {
-    background: #000000 !important;
-    padding: 11px;
+    background: #0d1820 !important;
+    padding: 13px;
     border-radius: 15px;
-    border: 2px solid #ffffff !important;
+    border: 1px solid #5d8291 !important;
 }
 
-/* 入力欄（テキストエリアなど） */
+div[data-testid="stMetric"] label,
+div[data-testid="stMetric"] [data-testid="stMetricValue"] {
+    color: #ffffff !important;
+}
+
+/* ---------- 入力欄 ---------- */
 textarea,
 input {
     border-radius: 12px !important;
-    background-color: #000000 !important;
+    background: #101b21 !important;
     color: #ffffff !important;
-    border: 2px solid #ffffff !important;
+    caret-color: #ffffff !important;
 }
 
-/* Streamlitの選択欄 */
-div[data-baseweb="select"] > div,
-div[data-baseweb="input"] > div,
-div[data-baseweb="textarea"] > div {
-    background-color: #111111 !important;
-    color: #ffffff !important;
-    border-color: #ffffff !important;
+textarea::placeholder,
+input::placeholder {
+    color: #9aacb5 !important;
 }
 
-/* ラベル・見出し・本文 */
-.stApp label,
-.stApp p,
-.stApp h1,
-.stApp h2,
-.stApp h3,
-.stApp h4,
-.stApp span {
+/* Selectbox / Multiselect の外枠 */
+div[data-baseweb="select"] > div {
+    background: #101b21 !important;
+    color: #ffffff !important;
+    border: 2px solid #718c99 !important;
+    border-radius: 12px !important;
+}
+
+/* 選択欄内の通常文字 */
+div[data-baseweb="select"] input,
+div[data-baseweb="select"] span {
+    color: #ffffff !important;
+}
+
+/* Multiselectで選択済みの船タグ */
+div[data-baseweb="tag"] {
+    background: #e53935 !important;
+    border: 1px solid #ffaaaa !important;
+    border-radius: 9px !important;
+}
+
+div[data-baseweb="tag"] span {
+    color: #ffffff !important;
+    font-weight: 800 !important;
+}
+
+/* タグ削除ボタン */
+div[data-baseweb="tag"] svg {
+    fill: #ffffff !important;
+}
+
+/* ドロップダウンの候補一覧 */
+ul[role="listbox"] {
+    background: #101b21 !important;
+}
+
+li[role="option"] {
+    background: #101b21 !important;
+    color: #ffffff !important;
+}
+
+li[role="option"]:hover {
+    background: #1d4655 !important;
+}
+
+/* テキストエリア外枠 */
+div[data-baseweb="textarea"] > div,
+div[data-baseweb="input"] > div {
+    background: #101b21 !important;
+    border-color: #718c99 !important;
+}
+
+/* ---------- ラジオ・チェックボックス ---------- */
+div[role="radiogroup"] label,
+div[data-testid="stCheckbox"] label {
+    color: #ffffff !important;
+}
+
+/* ---------- Expander ---------- */
+details {
+    background: #0d1820 !important;
+    border: 1px solid #526d79 !important;
+    border-radius: 12px !important;
+}
+
+details summary {
+    color: #ffffff !important;
+}
+
+/* ---------- Sidebar ---------- */
+section[data-testid="stSidebar"] {
+    background: #081219 !important;
+    border-right: 1px solid #45616d;
+}
+
+section[data-testid="stSidebar"] * {
     color: #ffffff;
 }
 
-/* サイドバー */
-section[data-testid="stSidebar"] {
-    background: #080808 !important;
-    border-right: 1px solid #ffffff;
+/* ---------- Info / Success / Warning / Error ---------- */
+div[data-testid="stAlert"] {
+    border-radius: 12px;
 }
 
-/* スマホ幅対応 */
+div[data-testid="stAlert"] p {
+    color: inherit !important;
+}
+
+/* ---------- Progress ---------- */
+div[data-testid="stProgress"] > div > div {
+    background-color: #25c8ff !important;
+}
+
+/* ---------- スマホ ---------- */
 @media screen and (max-width: 640px) {
     .block-container {
-        padding-left: 0.85rem;
-        padding-right: 0.85rem;
-    }
-
-    .hero h1 {
-        font-size: 1.35rem;
+        padding-left: 0.75rem;
+        padding-right: 0.75rem;
+        padding-top: 0.6rem;
     }
 
     .hero {
@@ -205,9 +303,30 @@ section[data-testid="stSidebar"] {
         border-radius: 16px;
     }
 
+    .hero h1 {
+        font-size: 1.35rem;
+        line-height: 1.35;
+    }
+
+    .hero p {
+        font-size: 0.95rem;
+    }
+
     .flow {
-        font-size: 0.9rem;
-        line-height: 1.7;
+        font-size: 0.88rem;
+        line-height: 1.75;
+        padding: 11px 8px;
+    }
+
+    .guide {
+        font-size: 0.95rem;
+        padding: 12px;
+    }
+
+    .message-card {
+        padding: 14px;
+        border-radius: 15px;
+        border-left-width: 8px;
     }
 
     .message-title {
@@ -215,6 +334,25 @@ section[data-testid="stSidebar"] {
     }
 
     .message-body {
+        font-size: 1rem;
+        line-height: 1.75;
+    }
+
+    .sub {
+        font-size: 0.82rem;
+    }
+
+    .tag {
+        font-size: 0.78rem;
+        padding: 4px 9px;
+    }
+
+    div[data-baseweb="tag"] {
+        max-width: 100%;
+    }
+
+    div.stButton > button {
+        min-height: 3.1rem;
         font-size: 1rem;
     }
 }
