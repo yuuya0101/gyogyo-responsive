@@ -1,3 +1,4 @@
 streamlit
 pandas
-
+SpeechRecognition
+audioop-lts; python_version>='3.13'
