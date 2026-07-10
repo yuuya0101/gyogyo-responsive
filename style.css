@@ -1,10 +1,12 @@
 /* =========================
-   漁業連絡確認システム CSS
+   漁業連絡確認システム CSS (屋外視認性重視：黒背景・白文字)
    ========================= */
 
 /* 全体背景 */
 .stApp {
-    background: linear-gradient(180deg, #eef7f9 0%, #f8fbfc 100%);
+    background: #000000 !important;
+    color: #ffffff !important;
+    /* 基本の文字色を完全な白に */
 }
 
 /* コンテンツ幅 */
@@ -16,12 +18,14 @@
 
 /* 上部タイトル */
 .hero {
-    background: linear-gradient(135deg, #0f4c5c 0%, #1b7f94 100%);
-    color: white;
+    background: linear-gradient(135deg, #0a3642 0%, #125666 100%);
+    /* やや深めの紺 */
+    color: #ffffff !important;
     padding: 20px 22px;
     border-radius: 20px;
     margin-bottom: 14px;
-    box-shadow: 0 8px 22px rgba(15, 76, 92, 0.18);
+    border: 2px solid #ffffff;
+    /* 屋外で見えやすいよう白い太枠を追加 */
 }
 
 .hero h1 {
@@ -32,54 +36,63 @@
 
 .hero p {
     margin: 8px 0 0 0;
-    opacity: 0.92;
+    opacity: 1;
+    /* 文字の透過をなくして視認性を向上 */
 }
 
 /* デモの流れ */
 .flow {
-    background: white;
-    border: 1px solid #d7e5e9;
+    background: #000000;
+    border: 2px solid #ffffff;
+    /* 枠線を白の太枠にして強調 */
     border-radius: 16px;
     padding: 13px;
     margin-bottom: 16px;
     text-align: center;
     font-weight: 900;
-    color: #0f4c5c;
-    box-shadow: 0 2px 10px rgba(0,0,0,.04);
+    color: #4df3ff;
+    /* 反射に強い、非常に明るいシアン（水色） */
 }
 
-/* 黄色の説明ボックス */
+/* 説明ボックス */
 .guide {
-    background: #fffbe8;
-    border-left: 7px solid #f0a500;
+    background: #000000;
+    border: 2px solid #ffffff;
+    border-left: 8px solid #ffcc00;
+    /* 左の境界線を太い明るい黄色に */
     padding: 13px 14px;
     border-radius: 14px;
     margin: 10px 0 16px 0;
     line-height: 1.7;
+    color: #ffffff !important;
 }
 
-/* 連絡カード */
+/* 通常の連絡カード */
 .message-card {
-    background: white;
-    border: 1px solid #d7e5e9;
-    border-left: 8px solid #0f4c5c;
+    background: #000000;
+    border: 2px solid #ffffff;
+    /* 枠線をくっきりした白に */
+    border-left: 10px solid #00aaff;
+    /* 左側のカラーバーを太く、明るい青に */
     padding: 16px;
     border-radius: 18px;
     margin: 12px 0;
-    box-shadow: 0 3px 12px rgba(0,0,0,.05);
 }
 
 /* 重要連絡カード */
 .message-important {
-    border-left-color: #d32f2f;
-    background: #fff8f8;
+    border-left-color: #ff3333;
+    /* 左側のカラーバーを明るい赤に */
+    border: 2px solid #ff3333;
+    /* カード自体の枠線も赤にして見落としを防止 */
+    background: #000000;
 }
 
 /* カード内タイトル */
 .message-title {
     font-size: 1.2rem;
     font-weight: 900;
-    color: #1b2f35;
+    color: #ffffff !important;
 }
 
 /* カード内本文 */
@@ -87,13 +100,15 @@
     font-size: 1.08rem;
     line-height: 1.8;
     margin-top: 8px;
-    color: #1b2f35;
+    color: #ffffff !important;
 }
 
-/* 補足文字 */
+/* 補足文字（日時など） */
 .sub {
-    color: #666;
+    color: #dddddd !important;
+    /* 屋外でも読めるよう明るいグレーに */
     font-size: 0.86rem;
+    font-weight: bold;
 }
 
 /* タグ */
@@ -101,8 +116,10 @@
     display: inline-block;
     padding: 4px 10px;
     border-radius: 999px;
-    background: #e8f0f2;
-    color: #16343d;
+    background: #222222;
+    border: 1px solid #ffffff;
+    /* タグにも白い枠線を追加 */
+    color: #4df3ff !important;
     margin-right: 5px;
     margin-top: 8px;
     font-size: 0.82rem;
@@ -111,37 +128,57 @@
 
 /* 重要タグ */
 .important-tag {
-    background: #d32f2f;
-    color: white;
+    background: #ff3333;
+    color: #ffffff !important;
+    border: 1px solid #ffffff;
 }
 
 /* 本文中の重要ワード */
 .keyword {
     font-weight: 900;
-    background: linear-gradient(transparent 55%, #ffe08a 55%);
+    background: #ffcc00;
+    /* 背景をしっかりとした黄色に */
+    color: #000000 !important;
+    /* 文字を黒にして反転させ、最も目立たせる */
+    padding: 0 4px;
+    border-radius: 4px;
 }
 
 /* ボタン */
-div.stButton > button {
+div.stButton>button {
     width: 100%;
     border-radius: 13px;
     height: 3em;
-    font-weight: 850;
-    border: 1px solid rgba(15,76,92,.16);
+    font-weight: 900;
+    border: 2px solid #ffffff !important;
+    /* ボタンの枠を白く太く */
+    background-color: #111111 !important;
+    color: #ffffff !important;
 }
 
-/* メトリック */
+/* ボタンが押されたとき・ホバー時 */
+div.stButton>button:hover,
+div.stButton>button:active {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+}
+
+/* メトリック（件数表示など） */
 div[data-testid="stMetric"] {
-    background: white;
+    background: #000000 !important;
     padding: 11px;
     border-radius: 15px;
-    border: 1px solid #d7e5e9;
-    box-shadow: 0 2px 10px rgba(0,0,0,.035);
+    border: 2px solid #ffffff !important;
 }
 
-/* 入力欄 */
-textarea, input {
+/* 入力欄（テキストエリアなど） */
+textarea,
+input {
     border-radius: 12px !important;
+    background-color: #000000 !important;
+    color: #ffffff !important;
+    border: 2px solid #ffffff !important;
+    /* 入力欄の枠を白く */
 }
 
 /* スマホ幅対応 */
@@ -165,152 +202,5 @@ textarea, input {
 
     .message-body {
         font-size: 1rem;
-    }
-}
-
-/* =========================
-   PC・スマホのレスポンシブ対応
-   ========================= */
-
-/* PC・タブレットでは横幅を広く使う */
-@media screen and (min-width: 641px) {
-    .block-container {
-        max-width: 1050px;
-        padding-left: 2rem;
-        padding-right: 2rem;
-    }
-
-    /* サイドバーをPC向けの幅にする */
-    section[data-testid="stSidebar"] {
-        min-width: 260px;
-        max-width: 300px;
-    }
-}
-
-/* スマホでは縦1列・タップしやすい画面にする */
-@media screen and (max-width: 640px) {
-    .block-container {
-        max-width: 100%;
-        padding-top: 0.65rem;
-        padding-left: 0.75rem;
-        padding-right: 0.75rem;
-        padding-bottom: 2rem;
-    }
-
-    .hero {
-        padding: 15px 14px;
-        border-radius: 14px;
-        margin-bottom: 10px;
-    }
-
-    .hero h1 {
-        font-size: 1.25rem;
-        line-height: 1.35;
-    }
-
-    .hero p {
-        font-size: 0.88rem;
-        line-height: 1.55;
-    }
-
-    .flow {
-        padding: 10px 8px;
-        font-size: 0.82rem;
-        line-height: 1.65;
-        border-radius: 12px;
-    }
-
-    .guide {
-        padding: 11px 12px;
-        margin: 8px 0 12px 0;
-        font-size: 0.92rem;
-        line-height: 1.6;
-    }
-
-    .message-card {
-        padding: 13px 12px;
-        border-radius: 14px;
-        margin: 10px 0;
-    }
-
-    .message-title {
-        font-size: 1rem;
-        line-height: 1.5;
-        overflow-wrap: anywhere;
-    }
-
-    .message-body {
-        font-size: 0.98rem;
-        line-height: 1.7;
-        overflow-wrap: anywhere;
-    }
-
-    .sub {
-        font-size: 0.78rem;
-        overflow-wrap: anywhere;
-    }
-
-    .tag {
-        font-size: 0.76rem;
-        padding: 4px 8px;
-    }
-
-    /* Streamlitの横並びカラムをスマホでは縦並びにする */
-    div[data-testid="stHorizontalBlock"] {
-        flex-direction: column !important;
-        gap: 0.6rem !important;
-    }
-
-    div[data-testid="column"] {
-        width: 100% !important;
-        flex: 1 1 100% !important;
-        min-width: 100% !important;
-    }
-
-    /* 入力部品をスマホ幅いっぱいにする */
-    div[data-baseweb="select"],
-    div[data-baseweb="textarea"],
-    div[data-baseweb="input"],
-    div[data-testid="stSelectbox"],
-    div[data-testid="stMultiSelect"],
-    div[data-testid="stTextInput"],
-    div[data-testid="stTextArea"] {
-        width: 100% !important;
-    }
-
-    /* ボタンを押しやすくする */
-    div.stButton > button,
-    div[data-testid="stDownloadButton"] > button {
-        width: 100%;
-        min-height: 46px;
-        height: auto;
-        padding: 0.7rem 0.75rem;
-        white-space: normal;
-        line-height: 1.35;
-    }
-
-    /* 指標カードも縦並び時に見やすくする */
-    div[data-testid="stMetric"] {
-        width: 100%;
-        padding: 10px 12px;
-    }
-
-    /* ラジオボタンの横並びが狭い場合は折り返す */
-    div[role="radiogroup"] {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.45rem;
-    }
-
-    h1 {
-        font-size: 1.55rem !important;
-    }
-
-    h2 {
-        font-size: 1.3rem !important;
-    }
-
-    h3 {
-        font-size: 1.1rem !important;
     }
 }
