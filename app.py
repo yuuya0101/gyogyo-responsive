@@ -1,5 +1,8 @@
 import sqlite3
 import io
+import time
+import math
+import hashlib
 from pathlib import Path
 from datetime import datetime
 import html
@@ -69,6 +72,8 @@ def apply_pending_send_form_reset():
         st.session_state["voice_audio_version"] = (
             st.session_state.get("voice_audio_version", 0) + 1
         )
+        st.session_state["voice_processed_hash"] = ""
+        st.session_state["voice_pending_send"] = None
 
 
 def get_conn():
@@ -551,6 +556,10 @@ if mode == "連絡作成":
         st.session_state["voice_transcript"] = ""
     if "voice_audio_version" not in st.session_state:
         st.session_state["voice_audio_version"] = 0
+    if "voice_processed_hash" not in st.session_state:
+        st.session_state["voice_processed_hash"] = ""
+    if "voice_pending_send" not in st.session_state:
+        st.session_state["voice_pending_send"] = None
 
     # 送信後の初期化は、各入力ウィジェットを作る前に行う。
     apply_pending_send_form_reset()
@@ -608,7 +617,7 @@ if mode == "連絡作成":
 
     else:
         st.caption(
-            "スマートフォンのマイクで録音し、文字に変換してから内容を確認して送信します。"
+            "録音を終了すると自動で文字起こしを行い、5秒後に対象船へ送信します。"
         )
 
         if not SPEECH_AVAILABLE:
@@ -622,41 +631,96 @@ if mode == "連絡作成":
                 key=f"voice_audio_{st.session_state['voice_audio_version']}",
             )
 
+            # 録音終了後、新しい音声だけを自動で文字起こしする
             if recorded_audio is not None:
-                st.audio(recorded_audio)
+                audio_bytes = recorded_audio.getvalue()
+                audio_hash = hashlib.sha256(audio_bytes).hexdigest()
 
-                if st.button("録音内容を文字に変換"):
-                    recognized_text = transcribe_recorded_audio(recorded_audio)
-                    if recognized_text:
-                        st.session_state["voice_transcript"] = recognized_text
-                        st.success("音声を文字に変換しました。内容を確認して送信してください。")
+                if (
+                    audio_hash != st.session_state["voice_processed_hash"]
+                    and st.session_state["voice_pending_send"] is None
+                ):
+                    st.session_state["voice_processed_hash"] = audio_hash
 
-            voice_message = st.text_area(
-                "認識結果・連絡内容",
-                key="voice_transcript",
-                placeholder="録音を文字に変換すると、ここに認識結果が表示されます。",
-                height=130,
-            )
+                    if len(target_ships) == 0:
+                        st.warning(
+                            "対象船が選択されていないため、自動送信を開始できません。"
+                            "対象船を選択してから、もう一度録音してください。"
+                        )
+                    else:
+                        with st.spinner("録音内容を文字に変換しています..."):
+                            recognized_text = transcribe_recorded_audio(recorded_audio)
 
-            voice_tags = detect_tags(voice_message)
-            st.info(f"自動タグ：{', '.join(voice_tags) if voice_tags else '通常'}")
+                        if recognized_text:
+                            st.session_state["voice_transcript"] = recognized_text
+                            st.session_state["voice_pending_send"] = {
+                                "message": recognized_text,
+                                "sender": sender,
+                                "targets": target_ships.copy(),
+                                "deadline": time.time() + 5,
+                            }
+                            st.rerun()
 
-            if st.button("認識した連絡を送信・記録する", type="primary"):
-                if recorded_audio is None:
-                    st.warning("先に音声を録音してください。")
-                elif not voice_message.strip():
-                    st.warning("録音内容を文字に変換するか、連絡内容を入力してください。")
-                elif len(target_ships) == 0:
-                    st.warning("対象船を選んでください。")
-                else:
-                    sent_targets = target_ships.copy()
-                    log_id = add_log(sender, voice_message.strip(), sent_targets)
+            pending = st.session_state.get("voice_pending_send")
+
+            if pending is not None:
+                remaining = max(
+                    0,
+                    math.ceil(float(pending["deadline"]) - time.time())
+                )
+
+                st.warning(
+                    f"{remaining}秒後に連絡を自動送信します。"
+                    "内容や送信先に誤りがある場合はキャンセルしてください。"
+                )
+
+                st.markdown("**送信先**")
+                st.write("、".join(pending["targets"]))
+
+                st.markdown("**認識結果**")
+                st.text_area(
+                    "自動文字起こし結果",
+                    value=pending["message"],
+                    height=130,
+                    disabled=True,
+                    label_visibility="collapsed",
+                )
+
+                if st.button(
+                    "自動送信をキャンセル",
+                    type="secondary",
+                    use_container_width=True,
+                ):
+                    st.session_state["voice_pending_send"] = None
+                    st.warning(
+                        "自動送信をキャンセルしました。"
+                        "再送信する場合は、もう一度録音してください。"
+                    )
+                    st.rerun()
+
+                if remaining <= 0:
+                    log_id = add_log(
+                        pending["sender"],
+                        pending["message"].strip(),
+                        pending["targets"],
+                    )
                     st.session_state["send_notice"] = {
                         "log_id": log_id,
-                        "targets": sent_targets,
+                        "targets": pending["targets"],
                     }
+                    st.session_state["voice_pending_send"] = None
                     reset_send_form()
                     st.rerun()
+
+                # 1秒ごとに画面を更新してカウントダウンを進める
+                time.sleep(1)
+                st.rerun()
+
+            elif recorded_audio is None:
+                st.info(
+                    "対象船を選択してから録音してください。"
+                    "録音終了後、自動で文字起こしと送信カウントダウンが始まります。"
+                )
 
 
 elif mode == "船側確認":
