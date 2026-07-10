@@ -6,7 +6,6 @@
 .stApp {
     background: #000000 !important;
     color: #ffffff !important;
-    /* 基本の文字色を完全な白に */
 }
 
 /* コンテンツ幅 */
@@ -19,13 +18,11 @@
 /* 上部タイトル */
 .hero {
     background: linear-gradient(135deg, #0a3642 0%, #125666 100%);
-    /* やや深めの紺 */
     color: #ffffff !important;
     padding: 20px 22px;
     border-radius: 20px;
     margin-bottom: 14px;
     border: 2px solid #ffffff;
-    /* 屋外で見えやすいよう白い太枠を追加 */
 }
 
 .hero h1 {
@@ -37,21 +34,18 @@
 .hero p {
     margin: 8px 0 0 0;
     opacity: 1;
-    /* 文字の透過をなくして視認性を向上 */
 }
 
 /* デモの流れ */
 .flow {
     background: #000000;
     border: 2px solid #ffffff;
-    /* 枠線を白の太枠にして強調 */
     border-radius: 16px;
     padding: 13px;
     margin-bottom: 16px;
     text-align: center;
     font-weight: 900;
     color: #4df3ff;
-    /* 反射に強い、非常に明るいシアン（水色） */
 }
 
 /* 説明ボックス */
@@ -59,7 +53,6 @@
     background: #000000;
     border: 2px solid #ffffff;
     border-left: 8px solid #ffcc00;
-    /* 左の境界線を太い明るい黄色に */
     padding: 13px 14px;
     border-radius: 14px;
     margin: 10px 0 16px 0;
@@ -71,9 +64,7 @@
 .message-card {
     background: #000000;
     border: 2px solid #ffffff;
-    /* 枠線をくっきりした白に */
     border-left: 10px solid #00aaff;
-    /* 左側のカラーバーを太く、明るい青に */
     padding: 16px;
     border-radius: 18px;
     margin: 12px 0;
@@ -81,10 +72,8 @@
 
 /* 重要連絡カード */
 .message-important {
-    border-left-color: #ff3333;
-    /* 左側のカラーバーを明るい赤に */
     border: 2px solid #ff3333;
-    /* カード自体の枠線も赤にして見落としを防止 */
+    border-left: 10px solid #ff3333;
     background: #000000;
 }
 
@@ -106,7 +95,6 @@
 /* 補足文字（日時など） */
 .sub {
     color: #dddddd !important;
-    /* 屋外でも読めるよう明るいグレーに */
     font-size: 0.86rem;
     font-weight: bold;
 }
@@ -118,7 +106,6 @@
     border-radius: 999px;
     background: #222222;
     border: 1px solid #ffffff;
-    /* タグにも白い枠線を追加 */
     color: #4df3ff !important;
     margin-right: 5px;
     margin-top: 8px;
@@ -137,28 +124,24 @@
 .keyword {
     font-weight: 900;
     background: #ffcc00;
-    /* 背景をしっかりとした黄色に */
     color: #000000 !important;
-    /* 文字を黒にして反転させ、最も目立たせる */
     padding: 0 4px;
     border-radius: 4px;
 }
 
 /* ボタン */
-div.stButton>button {
+div.stButton > button {
     width: 100%;
     border-radius: 13px;
     height: 3em;
     font-weight: 900;
     border: 2px solid #ffffff !important;
-    /* ボタンの枠を白く太く */
     background-color: #111111 !important;
     color: #ffffff !important;
 }
 
-/* ボタンが押されたとき・ホバー時 */
-div.stButton>button:hover,
-div.stButton>button:active {
+div.stButton > button:hover,
+div.stButton > button:active {
     background-color: #ffffff !important;
     color: #000000 !important;
 }
@@ -178,11 +161,41 @@ input {
     background-color: #000000 !important;
     color: #ffffff !important;
     border: 2px solid #ffffff !important;
-    /* 入力欄の枠を白く */
+}
+
+/* Streamlitの選択欄 */
+div[data-baseweb="select"] > div,
+div[data-baseweb="input"] > div,
+div[data-baseweb="textarea"] > div {
+    background-color: #111111 !important;
+    color: #ffffff !important;
+    border-color: #ffffff !important;
+}
+
+/* ラベル・見出し・本文 */
+.stApp label,
+.stApp p,
+.stApp h1,
+.stApp h2,
+.stApp h3,
+.stApp h4,
+.stApp span {
+    color: #ffffff;
+}
+
+/* サイドバー */
+section[data-testid="stSidebar"] {
+    background: #080808 !important;
+    border-right: 1px solid #ffffff;
 }
 
 /* スマホ幅対応 */
 @media screen and (max-width: 640px) {
+    .block-container {
+        padding-left: 0.85rem;
+        padding-right: 0.85rem;
+    }
+
     .hero h1 {
         font-size: 1.35rem;
     }
@@ -194,6 +207,7 @@ input {
 
     .flow {
         font-size: 0.9rem;
+        line-height: 1.7;
     }
 
     .message-title {
