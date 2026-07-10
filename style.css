@@ -1,261 +1,280 @@
-/* =========================
-   漁業連絡確認システム CSS
-   視認性・配色・Multiselect不具合 修正版
-   ========================= */
+/* =========================================================
+   漁業連絡確認システム
+   Professional Business UI
+   ========================================================= */
 
-/* ---------- 全体 ---------- */
+/* ---------- Base ---------- */
 html,
 body,
 [data-testid="stAppViewContainer"],
 .stApp {
-    background: #0b141a !important;
-    color: #f5f7fa !important;
+    background: #f6f8fb !important;
+    color: #1f2937 !important;
+    font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        "Noto Sans JP",
+        sans-serif;
 }
 
 [data-testid="stHeader"] {
-    background: rgba(11, 20, 26, 0.96) !important;
+    background: rgba(246, 248, 251, 0.96) !important;
+    border-bottom: 1px solid #e5e7eb;
 }
 
 .block-container {
-    max-width: 1050px;
-    padding-top: 1rem;
-    padding-bottom: 3rem;
+    max-width: 1120px;
+    padding-top: 1.5rem;
+    padding-bottom: 4rem;
 }
 
-/* 通常文字 */
-.stApp p,
-.stApp label,
-.stApp li,
+/* ---------- Typography ---------- */
 .stApp h1,
 .stApp h2,
 .stApp h3,
 .stApp h4 {
-    color: #f5f7fa;
+    color: #111827 !important;
+    letter-spacing: -0.02em;
 }
 
-/* ---------- 上部タイトル ---------- */
+.stApp h1 {
+    font-size: 2rem;
+    font-weight: 700;
+}
+
+.stApp h2 {
+    font-size: 1.55rem;
+    font-weight: 700;
+}
+
+.stApp h3 {
+    font-size: 1.15rem;
+    font-weight: 700;
+}
+
+.stApp p,
+.stApp label,
+.stApp li {
+    color: #374151;
+}
+
+/* ---------- Header ---------- */
 .hero {
-    background: linear-gradient(135deg, #123b47 0%, #1f6f82 100%);
-    color: #ffffff !important;
-    padding: 20px 22px;
-    border-radius: 20px;
-    margin-bottom: 14px;
-    border: 1px solid #6fd6ea;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.22);
+    background: #ffffff;
+    color: #111827 !important;
+    padding: 26px 28px;
+    border-radius: 10px;
+    margin-bottom: 18px;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
 }
 
 .hero h1 {
     margin: 0;
     font-size: 1.75rem;
-    font-weight: 900;
-    color: #ffffff !important;
+    font-weight: 700;
+    color: #111827 !important;
 }
 
 .hero p {
     margin: 8px 0 0;
-    color: #e6f7fb !important;
+    color: #6b7280 !important;
+    font-size: 0.98rem;
 }
 
-/* ---------- 流れ ---------- */
+/* ---------- Process Bar ---------- */
 .flow {
-    background: #14232b;
-    border: 1px solid #4ea9bb;
-    border-radius: 16px;
-    padding: 13px;
-    margin-bottom: 16px;
-    text-align: center;
-    font-weight: 900;
-    color: #8be7f5;
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin-bottom: 20px;
+    text-align: left;
+    font-weight: 600;
+    color: #1f4e79;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
 }
 
-/* ---------- 説明ボックス ---------- */
+/* ---------- Guide ---------- */
 .guide {
-    background: #242114;
-    border: 1px solid #7f7135;
-    border-left: 8px solid #f0b429;
-    padding: 13px 14px;
-    border-radius: 14px;
-    margin: 10px 0 16px;
+    background: #fffdf5;
+    border: 1px solid #f1e6b8;
+    border-left: 4px solid #d89b17;
+    padding: 14px 16px;
+    border-radius: 6px;
+    margin: 12px 0 18px;
     line-height: 1.7;
-    color: #fff8dc !important;
+    color: #4b5563 !important;
 }
 
-/* ---------- 連絡カード ---------- */
+/* ---------- Message Card ---------- */
 .message-card {
-    background: #121f27;
-    border: 1px solid #476573;
-    border-left: 9px solid #2fb7d5;
-    padding: 18px;
-    border-radius: 18px;
-    margin: 12px 0;
-    box-shadow: 0 7px 20px rgba(0, 0, 0, 0.22);
+    background: #ffffff;
+    border: 1px solid #dfe3e8;
+    border-left: 4px solid #2f6f9f;
+    padding: 18px 20px;
+    border-radius: 8px;
+    margin: 14px 0;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
 }
 
 .message-important {
-    background: #251719;
-    border: 1px solid #a95757;
-    border-left: 9px solid #ef5350;
+    background: #fffafa;
+    border-color: #e2b8b8;
+    border-left-color: #c83b3b;
 }
 
 .message-title {
-    font-size: 1.2rem;
-    font-weight: 900;
-    color: #ffffff !important;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #111827 !important;
+    margin-bottom: 2px;
 }
 
 .message-body {
-    font-size: 1.08rem;
-    line-height: 1.8;
-    margin-top: 10px;
-    color: #ffffff !important;
+    font-size: 1rem;
+    line-height: 1.75;
+    margin-top: 12px;
+    color: #1f2937 !important;
     overflow-wrap: anywhere;
 }
 
 .sub {
-    color: #b9c7cf !important;
-    font-size: 0.9rem;
-    font-weight: 700;
+    color: #6b7280 !important;
+    font-size: 0.84rem;
+    font-weight: 500;
 }
 
-/* ---------- タグ ---------- */
+/* ---------- Tags ---------- */
 .tag {
     display: inline-block;
-    padding: 5px 11px;
-    border-radius: 999px;
-    background: #17313c;
-    border: 1px solid #4aaabd;
-    color: #9debf7 !important;
+    padding: 3px 8px;
+    border-radius: 4px;
+    background: #edf3f8;
+    border: 1px solid #d4e0e9;
+    color: #315d7a !important;
     margin-right: 6px;
-    margin-top: 8px;
-    font-size: 0.84rem;
-    font-weight: 900;
+    margin-top: 10px;
+    font-size: 0.76rem;
+    font-weight: 600;
 }
 
 .important-tag {
-    background: #b83a3a;
-    border-color: #e67c7c;
-    color: #ffffff !important;
+    background: #fbeaea;
+    border-color: #efcaca;
+    color: #9f2f2f !important;
 }
 
+/* Important words */
 .keyword {
-    display: inline-block;
-    font-weight: 900;
-    background: #f2c94c;
-    color: #171717 !important;
-    padding: 1px 5px;
-    border-radius: 5px;
-    line-height: 1.35;
+    font-weight: 700;
+    color: #9f2f2f !important;
+    background: transparent;
+    padding: 0;
 }
 
-/* ---------- ボタン ---------- */
+/* ---------- Buttons ---------- */
 div.stButton > button,
 div[data-testid="stDownloadButton"] > button {
     width: 100%;
-    min-height: 3rem;
-    border-radius: 13px;
-    font-weight: 900;
-    border: 1px solid #61c2d6 !important;
-    background: #163946 !important;
+    min-height: 2.75rem;
+    border-radius: 6px;
+    font-weight: 600;
+    border: 1px solid #315f7d !important;
+    background: #315f7d !important;
     color: #ffffff !important;
+    box-shadow: none !important;
 }
 
 div.stButton > button:hover,
 div.stButton > button:focus,
 div[data-testid="stDownloadButton"] > button:hover {
-    background: #20566a !important;
-    border-color: #a8eef8 !important;
+    background: #274d66 !important;
+    border-color: #274d66 !important;
     color: #ffffff !important;
 }
 
-/* ---------- メトリック ---------- */
+/* ---------- Metrics ---------- */
 div[data-testid="stMetric"] {
-    background: #121f27 !important;
-    padding: 13px;
-    border-radius: 15px;
-    border: 1px solid #476573 !important;
+    background: #ffffff !important;
+    padding: 16px;
+    border-radius: 8px;
+    border: 1px solid #e5e7eb !important;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
 }
 
-div[data-testid="stMetric"] label,
+div[data-testid="stMetric"] label {
+    color: #6b7280 !important;
+    font-size: 0.82rem !important;
+}
+
 div[data-testid="stMetric"] [data-testid="stMetricValue"] {
-    color: #ffffff !important;
+    color: #111827 !important;
+    font-size: 1.5rem !important;
+    font-weight: 700;
 }
 
-/* ---------- 通常入力欄 ---------- */
-textarea {
-    border-radius: 12px !important;
-    background: #132129 !important;
-    color: #ffffff !important;
-    border: 1px solid #587480 !important;
-    caret-color: #ffffff !important;
-}
-
-textarea::placeholder {
-    color: #8fa2ac !important;
-}
-
-/* Text inputだけに適用 */
-div[data-baseweb="input"] > div {
-    background: #132129 !important;
-    border: 1px solid #587480 !important;
-    border-radius: 12px !important;
-}
-
-div[data-baseweb="input"] input {
-    background: transparent !important;
-    color: #ffffff !important;
-    border: 0 !important;
-    outline: none !important;
+/* ---------- Inputs ---------- */
+textarea,
+input {
+    border-radius: 6px !important;
+    background: #ffffff !important;
+    color: #111827 !important;
+    border: 1px solid #cfd5dc !important;
     box-shadow: none !important;
 }
 
-/* ---------- Selectbox / Multiselect ---------- */
+textarea:focus,
+input:focus {
+    border-color: #4b7fa3 !important;
+    box-shadow: 0 0 0 2px rgba(75, 127, 163, 0.12) !important;
+}
+
+textarea::placeholder,
+input::placeholder {
+    color: #9ca3af !important;
+}
+
+/* ---------- Select / Multiselect ---------- */
 div[data-baseweb="select"] > div {
-    background: #132129 !important;
-    color: #ffffff !important;
-    border: 1px solid #587480 !important;
-    border-radius: 12px !important;
-    min-height: 48px;
+    background: #ffffff !important;
+    color: #111827 !important;
+    border: 1px solid #cfd5dc !important;
+    border-radius: 6px !important;
+    min-height: 44px;
+    box-shadow: none !important;
 }
 
-/* 選択欄の文字 */
 div[data-baseweb="select"] span {
-    color: #ffffff !important;
+    color: #111827 !important;
 }
 
-/* 選択済みタグ */
 div[data-baseweb="tag"] {
-    background: #276579 !important;
-    border: 1px solid #78cad9 !important;
-    border-radius: 8px !important;
-    color: #ffffff !important;
+    background: #e8eef3 !important;
+    border: 1px solid #cbd6df !important;
+    border-radius: 4px !important;
 }
 
 div[data-baseweb="tag"] span {
-    color: #ffffff !important;
-    font-weight: 800 !important;
+    color: #244b63 !important;
+    font-weight: 600 !important;
 }
 
 div[data-baseweb="tag"] svg {
-    fill: #ffffff !important;
+    fill: #5d7484 !important;
 }
 
-/* Multiselect内部の入力欄
-   黒い点・黒い丸・白枠の原因を解除 */
 div[data-baseweb="select"] input {
     background: transparent !important;
-    color: #ffffff !important;
     border: 0 !important;
     outline: none !important;
     box-shadow: none !important;
-    border-radius: 0 !important;
-    min-width: 2px !important;
-    width: auto !important;
+    color: #111827 !important;
     padding: 0 !important;
     margin: 0 2px !important;
-    caret-color: #ffffff !important;
 }
 
-/* 内部入力のラッパーにも余計な装飾を付けない */
 div[data-baseweb="select"] [data-baseweb="input"] > div {
     background: transparent !important;
     border: 0 !important;
@@ -263,123 +282,105 @@ div[data-baseweb="select"] [data-baseweb="input"] > div {
     padding: 0 !important;
 }
 
-/* ドロップダウン候補 */
+/* Dropdown */
 ul[role="listbox"] {
-    background: #132129 !important;
-    border: 1px solid #587480 !important;
+    background: #ffffff !important;
+    border: 1px solid #d1d5db !important;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08) !important;
 }
 
 li[role="option"] {
-    background: #132129 !important;
-    color: #ffffff !important;
+    background: #ffffff !important;
+    color: #111827 !important;
 }
 
 li[role="option"]:hover,
 li[role="option"][aria-selected="true"] {
-    background: #214755 !important;
+    background: #eef4f8 !important;
+}
+
+/* ---------- Alerts ---------- */
+div[data-testid="stAlert"] {
+    border-radius: 6px !important;
+    box-shadow: none !important;
+}
+
+div[data-testid="stAlert"] p {
+    font-weight: 500;
 }
 
 /* ---------- Expander ---------- */
 details {
-    background: #121f27 !important;
-    border: 1px solid #476573 !important;
-    border-radius: 12px !important;
+    background: #ffffff !important;
+    border: 1px solid #e5e7eb !important;
+    border-radius: 6px !important;
 }
 
 details summary {
-    color: #ffffff !important;
+    color: #374151 !important;
+    font-weight: 600;
 }
 
 /* ---------- Sidebar ---------- */
 section[data-testid="stSidebar"] {
-    background: #0e1920 !important;
-    border-right: 1px solid #334c57;
+    background: #ffffff !important;
+    border-right: 1px solid #e5e7eb;
 }
 
 section[data-testid="stSidebar"] * {
-    color: #ffffff;
+    color: #374151;
 }
 
-/* ---------- Alert配色 ---------- */
-div[data-testid="stAlert"] {
-    border-radius: 12px !important;
-    border-width: 1px !important;
+/* ---------- Progress ---------- */
+div[data-testid="stProgress"] > div > div {
+    background-color: #3f7ea6 !important;
 }
 
-/* info */
-div[data-testid="stAlert"][data-baseweb="notification"] {
-    color: #ffffff !important;
-}
-
-/* 警告系を黄色寄りに */
-div[data-testid="stAlert"] svg {
-    opacity: 0.95;
-}
-
-/* ---------- 船別一覧の状態表示 ---------- */
-div[data-testid="stAlert"] p {
-    font-weight: 700;
-}
-
-/* ---------- スマホ ---------- */
+/* ---------- Mobile ---------- */
 @media screen and (max-width: 640px) {
     .block-container {
-        padding-left: 0.75rem;
-        padding-right: 0.75rem;
-        padding-top: 0.6rem;
+        padding-left: 0.9rem;
+        padding-right: 0.9rem;
+        padding-top: 0.75rem;
     }
 
     .hero {
-        padding: 16px;
-        border-radius: 16px;
+        padding: 20px;
+        border-radius: 8px;
     }
 
     .hero h1 {
-        font-size: 1.35rem;
-        line-height: 1.35;
+        font-size: 1.4rem;
+    }
+
+    .hero p {
+        font-size: 0.92rem;
     }
 
     .flow {
         font-size: 0.88rem;
-        line-height: 1.75;
-        padding: 11px 8px;
+        line-height: 1.6;
     }
 
     .guide {
-        font-size: 0.95rem;
-        padding: 12px;
+        font-size: 0.92rem;
     }
 
     .message-card {
-        padding: 14px;
-        border-radius: 15px;
-        border-left-width: 8px;
+        padding: 15px;
+        border-radius: 7px;
     }
 
     .message-title {
-        font-size: 1.08rem;
+        font-size: 1rem;
     }
 
     .message-body {
-        font-size: 1rem;
-        line-height: 1.75;
-    }
-
-    .sub {
-        font-size: 0.82rem;
-    }
-
-    .tag {
-        font-size: 0.78rem;
-        padding: 4px 9px;
-    }
-
-    div[data-baseweb="tag"] {
-        max-width: 100%;
+        font-size: 0.96rem;
     }
 
     div.stButton > button {
-        min-height: 3.1rem;
-        font-size: 1rem;
+        min-height: 2.8rem;
+        font-size: 0.95rem;
     }
 }
