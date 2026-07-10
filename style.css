@@ -1,6 +1,6 @@
 /* =========================
    漁業連絡確認システム CSS
-   屋外向け・高コントラスト改善版
+   視認性・配色・Multiselect不具合 修正版
    ========================= */
 
 /* ---------- 全体 ---------- */
@@ -8,12 +8,12 @@ html,
 body,
 [data-testid="stAppViewContainer"],
 .stApp {
-    background: #071015 !important;
-    color: #f7fbff !important;
+    background: #0b141a !important;
+    color: #f5f7fa !important;
 }
 
 [data-testid="stHeader"] {
-    background: rgba(7, 16, 21, 0.96) !important;
+    background: rgba(11, 20, 26, 0.96) !important;
 }
 
 .block-container {
@@ -22,7 +22,7 @@ body,
     padding-bottom: 3rem;
 }
 
-/* 通常の文字 */
+/* 通常文字 */
 .stApp p,
 .stApp label,
 .stApp li,
@@ -30,18 +30,18 @@ body,
 .stApp h2,
 .stApp h3,
 .stApp h4 {
-    color: #f7fbff;
+    color: #f5f7fa;
 }
 
 /* ---------- 上部タイトル ---------- */
 .hero {
-    background: linear-gradient(135deg, #0d4250 0%, #176f82 100%);
+    background: linear-gradient(135deg, #123b47 0%, #1f6f82 100%);
     color: #ffffff !important;
     padding: 20px 22px;
     border-radius: 20px;
     margin-bottom: 14px;
-    border: 2px solid #8eeeff;
-    box-shadow: 0 8px 24px rgba(0, 180, 216, 0.18);
+    border: 1px solid #6fd6ea;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.22);
 }
 
 .hero h1 {
@@ -52,69 +52,67 @@ body,
 }
 
 .hero p {
-    margin: 8px 0 0 0;
-    color: #e8fbff !important;
-    opacity: 1;
+    margin: 8px 0 0;
+    color: #e6f7fb !important;
 }
 
 /* ---------- 流れ ---------- */
 .flow {
-    background: #101c22;
-    border: 2px solid #6fe9ff;
+    background: #14232b;
+    border: 1px solid #4ea9bb;
     border-radius: 16px;
     padding: 13px;
     margin-bottom: 16px;
     text-align: center;
     font-weight: 900;
-    color: #7ff3ff;
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.28);
+    color: #8be7f5;
 }
 
 /* ---------- 説明ボックス ---------- */
 .guide {
-    background: #171a10;
-    border: 1px solid #ffe17a;
-    border-left: 8px solid #ffca28;
+    background: #242114;
+    border: 1px solid #7f7135;
+    border-left: 8px solid #f0b429;
     padding: 13px 14px;
     border-radius: 14px;
-    margin: 10px 0 16px 0;
+    margin: 10px 0 16px;
     line-height: 1.7;
-    color: #fffce8 !important;
+    color: #fff8dc !important;
 }
 
 /* ---------- 連絡カード ---------- */
 .message-card {
-    background: #0d1820;
-    border: 1px solid #6c8795;
-    border-left: 10px solid #25bfff;
+    background: #121f27;
+    border: 1px solid #476573;
+    border-left: 9px solid #2fb7d5;
     padding: 18px;
     border-radius: 18px;
     margin: 12px 0;
-    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.28);
+    box-shadow: 0 7px 20px rgba(0, 0, 0, 0.22);
 }
 
 .message-important {
-    background: #211012;
-    border: 2px solid #ff6b6b;
-    border-left: 10px solid #ff3b3b;
+    background: #251719;
+    border: 1px solid #a95757;
+    border-left: 9px solid #ef5350;
 }
 
 .message-title {
-    font-size: 1.22rem;
+    font-size: 1.2rem;
     font-weight: 900;
     color: #ffffff !important;
 }
 
 .message-body {
     font-size: 1.08rem;
-    line-height: 1.85;
+    line-height: 1.8;
     margin-top: 10px;
     color: #ffffff !important;
     overflow-wrap: anywhere;
 }
 
 .sub {
-    color: #c9d6dd !important;
+    color: #b9c7cf !important;
     font-size: 0.9rem;
     font-weight: 700;
 }
@@ -124,9 +122,9 @@ body,
     display: inline-block;
     padding: 5px 11px;
     border-radius: 999px;
-    background: #12303b;
-    border: 1px solid #78e9ff;
-    color: #8bf4ff !important;
+    background: #17313c;
+    border: 1px solid #4aaabd;
+    color: #9debf7 !important;
     margin-right: 6px;
     margin-top: 8px;
     font-size: 0.84rem;
@@ -134,17 +132,16 @@ body,
 }
 
 .important-tag {
-    background: #c62828;
-    border-color: #ffb3b3;
+    background: #b83a3a;
+    border-color: #e67c7c;
     color: #ffffff !important;
 }
 
-/* 本文中の重要ワード */
 .keyword {
     display: inline-block;
     font-weight: 900;
-    background: #ffd632;
-    color: #111111 !important;
+    background: #f2c94c;
+    color: #171717 !important;
     padding: 1px 5px;
     border-radius: 5px;
     line-height: 1.35;
@@ -157,25 +154,25 @@ div[data-testid="stDownloadButton"] > button {
     min-height: 3rem;
     border-radius: 13px;
     font-weight: 900;
-    border: 2px solid #7beaff !important;
-    background: #10313d !important;
+    border: 1px solid #61c2d6 !important;
+    background: #163946 !important;
     color: #ffffff !important;
 }
 
 div.stButton > button:hover,
 div.stButton > button:focus,
 div[data-testid="stDownloadButton"] > button:hover {
-    background: #1b596b !important;
-    border-color: #ffffff !important;
+    background: #20566a !important;
+    border-color: #a8eef8 !important;
     color: #ffffff !important;
 }
 
 /* ---------- メトリック ---------- */
 div[data-testid="stMetric"] {
-    background: #0d1820 !important;
+    background: #121f27 !important;
     padding: 13px;
     border-radius: 15px;
-    border: 1px solid #5d8291 !important;
+    border: 1px solid #476573 !important;
 }
 
 div[data-testid="stMetric"] label,
@@ -183,39 +180,54 @@ div[data-testid="stMetric"] [data-testid="stMetricValue"] {
     color: #ffffff !important;
 }
 
-/* ---------- 入力欄 ---------- */
-textarea,
-input {
+/* ---------- 通常入力欄 ---------- */
+textarea {
     border-radius: 12px !important;
-    background: #101b21 !important;
+    background: #132129 !important;
     color: #ffffff !important;
+    border: 1px solid #587480 !important;
     caret-color: #ffffff !important;
 }
 
-textarea::placeholder,
-input::placeholder {
-    color: #9aacb5 !important;
+textarea::placeholder {
+    color: #8fa2ac !important;
 }
 
-/* Selectbox / Multiselect の外枠 */
-div[data-baseweb="select"] > div {
-    background: #101b21 !important;
-    color: #ffffff !important;
-    border: 2px solid #718c99 !important;
+/* Text inputだけに適用 */
+div[data-baseweb="input"] > div {
+    background: #132129 !important;
+    border: 1px solid #587480 !important;
     border-radius: 12px !important;
 }
 
-/* 選択欄内の通常文字 */
-div[data-baseweb="select"] input,
+div[data-baseweb="input"] input {
+    background: transparent !important;
+    color: #ffffff !important;
+    border: 0 !important;
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+/* ---------- Selectbox / Multiselect ---------- */
+div[data-baseweb="select"] > div {
+    background: #132129 !important;
+    color: #ffffff !important;
+    border: 1px solid #587480 !important;
+    border-radius: 12px !important;
+    min-height: 48px;
+}
+
+/* 選択欄の文字 */
 div[data-baseweb="select"] span {
     color: #ffffff !important;
 }
 
-/* Multiselectで選択済みの船タグ */
+/* 選択済みタグ */
 div[data-baseweb="tag"] {
-    background: #e53935 !important;
-    border: 1px solid #ffaaaa !important;
-    border-radius: 9px !important;
+    background: #276579 !important;
+    border: 1px solid #78cad9 !important;
+    border-radius: 8px !important;
+    color: #ffffff !important;
 }
 
 div[data-baseweb="tag"] span {
@@ -223,42 +235,54 @@ div[data-baseweb="tag"] span {
     font-weight: 800 !important;
 }
 
-/* タグ削除ボタン */
 div[data-baseweb="tag"] svg {
     fill: #ffffff !important;
 }
 
-/* ドロップダウンの候補一覧 */
+/* Multiselect内部の入力欄
+   黒い点・黒い丸・白枠の原因を解除 */
+div[data-baseweb="select"] input {
+    background: transparent !important;
+    color: #ffffff !important;
+    border: 0 !important;
+    outline: none !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    min-width: 2px !important;
+    width: auto !important;
+    padding: 0 !important;
+    margin: 0 2px !important;
+    caret-color: #ffffff !important;
+}
+
+/* 内部入力のラッパーにも余計な装飾を付けない */
+div[data-baseweb="select"] [data-baseweb="input"] > div {
+    background: transparent !important;
+    border: 0 !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+}
+
+/* ドロップダウン候補 */
 ul[role="listbox"] {
-    background: #101b21 !important;
+    background: #132129 !important;
+    border: 1px solid #587480 !important;
 }
 
 li[role="option"] {
-    background: #101b21 !important;
+    background: #132129 !important;
     color: #ffffff !important;
 }
 
-li[role="option"]:hover {
-    background: #1d4655 !important;
-}
-
-/* テキストエリア外枠 */
-div[data-baseweb="textarea"] > div,
-div[data-baseweb="input"] > div {
-    background: #101b21 !important;
-    border-color: #718c99 !important;
-}
-
-/* ---------- ラジオ・チェックボックス ---------- */
-div[role="radiogroup"] label,
-div[data-testid="stCheckbox"] label {
-    color: #ffffff !important;
+li[role="option"]:hover,
+li[role="option"][aria-selected="true"] {
+    background: #214755 !important;
 }
 
 /* ---------- Expander ---------- */
 details {
-    background: #0d1820 !important;
-    border: 1px solid #526d79 !important;
+    background: #121f27 !important;
+    border: 1px solid #476573 !important;
     border-radius: 12px !important;
 }
 
@@ -268,26 +292,33 @@ details summary {
 
 /* ---------- Sidebar ---------- */
 section[data-testid="stSidebar"] {
-    background: #081219 !important;
-    border-right: 1px solid #45616d;
+    background: #0e1920 !important;
+    border-right: 1px solid #334c57;
 }
 
 section[data-testid="stSidebar"] * {
     color: #ffffff;
 }
 
-/* ---------- Info / Success / Warning / Error ---------- */
+/* ---------- Alert配色 ---------- */
 div[data-testid="stAlert"] {
-    border-radius: 12px;
+    border-radius: 12px !important;
+    border-width: 1px !important;
 }
 
+/* info */
+div[data-testid="stAlert"][data-baseweb="notification"] {
+    color: #ffffff !important;
+}
+
+/* 警告系を黄色寄りに */
+div[data-testid="stAlert"] svg {
+    opacity: 0.95;
+}
+
+/* ---------- 船別一覧の状態表示 ---------- */
 div[data-testid="stAlert"] p {
-    color: inherit !important;
-}
-
-/* ---------- Progress ---------- */
-div[data-testid="stProgress"] > div > div {
-    background-color: #25c8ff !important;
+    font-weight: 700;
 }
 
 /* ---------- スマホ ---------- */
@@ -306,10 +337,6 @@ div[data-testid="stProgress"] > div > div {
     .hero h1 {
         font-size: 1.35rem;
         line-height: 1.35;
-    }
-
-    .hero p {
-        font-size: 0.95rem;
     }
 
     .flow {
