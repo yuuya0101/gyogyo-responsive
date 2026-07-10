@@ -52,10 +52,18 @@ def apply_message_template():
 
 
 def reset_send_form():
-    """送信完了後に入力内容を初期化する。"""
-    st.session_state["send_targets"] = []
-    st.session_state["send_template"] = "自由入力"
-    st.session_state["send_message"] = ""
+    """次回の再実行時に送信フォームを初期化する予約を行う。"""
+    # Streamlitでは、画面に表示済みのウィジェットと同じキーを
+    # ボタン処理の途中で直接変更すると例外になるため、ここでは予約だけ行う。
+    st.session_state["send_form_reset_pending"] = True
+
+
+def apply_pending_send_form_reset():
+    """ウィジェット生成前に、予約されたフォーム初期化を実行する。"""
+    if st.session_state.pop("send_form_reset_pending", False):
+        st.session_state["send_targets"] = []
+        st.session_state["send_template"] = "自由入力"
+        st.session_state["send_message"] = ""
 
 
 def get_conn():
@@ -533,6 +541,9 @@ if mode == "連絡作成":
         st.session_state["send_template"] = "帰港連絡"
     if "send_message" not in st.session_state:
         st.session_state["send_message"] = MESSAGE_TEMPLATES["帰港連絡"]
+
+    # 送信後の初期化は、各入力ウィジェットを作る前に行う。
+    apply_pending_send_form_reset()
 
     input_type = st.radio(
         "入力方法",
