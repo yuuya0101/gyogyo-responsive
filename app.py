@@ -1,4 +1,5 @@
 import sqlite3
+import io
 from pathlib import Path
 from datetime import datetime
 import html
@@ -64,6 +65,10 @@ def apply_pending_send_form_reset():
         st.session_state["send_targets"] = []
         st.session_state["send_template"] = "自由入力"
         st.session_state["send_message"] = ""
+        st.session_state["voice_transcript"] = ""
+        st.session_state["voice_audio_version"] = (
+            st.session_state.get("voice_audio_version", 0) + 1
+        )
 
 
 def get_conn():
@@ -257,28 +262,29 @@ def reset_demo_data():
     seed_sample_if_empty()
 
 
-def recognize_from_microphone(seconds=5):
+def transcribe_recorded_audio(uploaded_audio):
+    """ブラウザで録音されたWAV音声を日本語テキストへ変換する。"""
     if not SPEECH_AVAILABLE:
-        st.error("SpeechRecognition または PyAudio がインストールされていません。")
+        st.error("音声認識ライブラリを読み込めませんでした。")
         return ""
 
-    recognizer = sr.Recognizer()
     try:
-        with sr.Microphone() as source:
-            st.write("マイク調整中です...")
-            recognizer.adjust_for_ambient_noise(source, duration=1)
-            st.write(f"{seconds}秒間、音声を聞き取ります。話してください。")
-            audio = recognizer.listen(source, phrase_time_limit=seconds)
+        audio_bytes = uploaded_audio.getvalue()
+        recognizer = sr.Recognizer()
 
-        try:
-            return recognizer.recognize_google(audio, language="ja-JP")
-        except sr.UnknownValueError:
-            return ""
-        except sr.RequestError:
-            st.error("音声認識サービスに接続できませんでした。")
-            return ""
-    except Exception as e:
-        st.error(f"マイクの取得に失敗しました: {e}")
+        with sr.AudioFile(io.BytesIO(audio_bytes)) as source:
+            audio_data = recognizer.record(source)
+
+        return recognizer.recognize_google(audio_data, language="ja-JP")
+
+    except sr.UnknownValueError:
+        st.warning("音声を聞き取れませんでした。周囲が静かな場所でもう一度録音してください。")
+        return ""
+    except sr.RequestError:
+        st.error("音声認識サービスに接続できませんでした。時間をおいて再度お試しください。")
+        return ""
+    except Exception as exc:
+        st.error(f"音声の変換に失敗しました：{exc}")
         return ""
 
 
@@ -541,6 +547,10 @@ if mode == "連絡作成":
         st.session_state["send_template"] = "帰港連絡"
     if "send_message" not in st.session_state:
         st.session_state["send_message"] = MESSAGE_TEMPLATES["帰港連絡"]
+    if "voice_transcript" not in st.session_state:
+        st.session_state["voice_transcript"] = ""
+    if "voice_audio_version" not in st.session_state:
+        st.session_state["voice_audio_version"] = 0
 
     # 送信後の初期化は、各入力ウィジェットを作る前に行う。
     apply_pending_send_form_reset()
@@ -597,27 +607,56 @@ if mode == "連絡作成":
                 st.rerun()
 
     else:
+        st.caption(
+            "スマートフォンのマイクで録音し、文字に変換してから内容を確認して送信します。"
+        )
+
         if not SPEECH_AVAILABLE:
-            st.warning("音声認識ライブラリが読み込めません。手入力を使用してください。")
+            st.error(
+                "音声認識ライブラリを読み込めません。requirements.txtを確認してください。"
+            )
+        else:
+            recorded_audio = st.audio_input(
+                "音声を録音",
+                sample_rate=16000,
+                key=f"voice_audio_{st.session_state['voice_audio_version']}",
+            )
 
-        seconds = st.slider("聞き取る秒数", 3, 15, 5)
+            if recorded_audio is not None:
+                st.audio(recorded_audio)
 
-        if st.button("マイクで聞き取って送信", type="primary"):
-            if len(target_ships) == 0:
-                st.warning("対象船を選んでください。")
-            else:
-                text = recognize_from_microphone(seconds)
-                if text:
+                if st.button("録音内容を文字に変換"):
+                    recognized_text = transcribe_recorded_audio(recorded_audio)
+                    if recognized_text:
+                        st.session_state["voice_transcript"] = recognized_text
+                        st.success("音声を文字に変換しました。内容を確認して送信してください。")
+
+            voice_message = st.text_area(
+                "認識結果・連絡内容",
+                key="voice_transcript",
+                placeholder="録音を文字に変換すると、ここに認識結果が表示されます。",
+                height=130,
+            )
+
+            voice_tags = detect_tags(voice_message)
+            st.info(f"自動タグ：{', '.join(voice_tags) if voice_tags else '通常'}")
+
+            if st.button("認識した連絡を送信・記録する", type="primary"):
+                if recorded_audio is None:
+                    st.warning("先に音声を録音してください。")
+                elif not voice_message.strip():
+                    st.warning("録音内容を文字に変換するか、連絡内容を入力してください。")
+                elif len(target_ships) == 0:
+                    st.warning("対象船を選んでください。")
+                else:
                     sent_targets = target_ships.copy()
-                    log_id = add_log(sender, text, sent_targets)
+                    log_id = add_log(sender, voice_message.strip(), sent_targets)
                     st.session_state["send_notice"] = {
                         "log_id": log_id,
                         "targets": sent_targets,
                     }
                     reset_send_form()
                     st.rerun()
-                else:
-                    st.warning("音声を認識できませんでした。")
 
 
 elif mode == "船側確認":
