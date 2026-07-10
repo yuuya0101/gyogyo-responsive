@@ -316,17 +316,29 @@ def show_guide(text):
 
 def render_log_card(log, status_text=None):
     important_class = "message-important" if is_important(log["tags"]) else ""
-    status_html = f'<div class="sub">{html.escape(status_text)}</div>' if status_text else ""
+    status_html = (
+        f'<div class="sub">{html.escape(status_text)}</div>'
+        if status_text else ""
+    )
 
-    st.markdown(f"""
-    <div class="message-card {important_class}">
-        {status_html}
-        <div class="message-title">ID:{html.escape(str(log["id"]))}　{html.escape(str(log["sender"]))}</div>
-        <div class="sub">送信時刻：{html.escape(str(log["created_at"]))}</div>
-        <div>{tag_badges(log["tags"])}</div>
-        <div class="message-body">{highlight_text_html(log["message"])}</div>
-    </div>
-    """, unsafe_allow_html=True)
+    card_html = (
+        f'<div class="message-card {important_class}">'
+        f'{status_html}'
+        f'<div class="message-title">'
+        f'ID:{html.escape(str(log["id"]))}　'
+        f'{html.escape(str(log["sender"]))}'
+        f'</div>'
+        f'<div class="sub">'
+        f'送信時刻：{html.escape(str(log["created_at"]))}'
+        f'</div>'
+        f'<div>{tag_badges(log["tags"])}</div>'
+        f'<div class="message-body">'
+        f'{highlight_text_html(log["message"])}'
+        f'</div>'
+        f'</div>'
+    )
+
+    st.markdown(card_html, unsafe_allow_html=True)
 
 
 st.set_page_config(page_title="漁業連絡確認システム", page_icon="📢", layout="wide")
